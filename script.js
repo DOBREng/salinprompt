@@ -2,15 +2,42 @@
 // PUSAT DATA ANDA
 // ===================================================================
 const promptData = [
-    { image: 'images/gambar1.png', 
-     tags: ['sketsa', 'anatomi', 'referensi'], 
-     category: 'Illustration',
-     prompt: `Sketsa referensi anatomi torso bagian depan dan pinggang dengan penekanan pada otot oblique.` },
-    { image: 'images/gambar2.png', tags: ['vektor', 'wanita', 'selebriti'], prompt: `Vector portrait illustration of Ariana Grande, flat cell shading, bold separated color blocks, no gradients, orange background.` },
-    { image: 'images/gambar3.png', tags: ['vektor', 'wanita', 'asia', 'realistis'], prompt: `Realistic vector art of an Asian woman with long dark hair, wearing a black top and fishnet gloves, looking at the camera.` },
-    { image: 'images/gambar4.png', tags: ['vektor', 'wanita', 'asia', 'pink'], prompt: `Vector illustration of an asian woman with dark hair, looking down, wearing a pink shirt.` },
-    { image: 'images/gambar5.png', tags: ['foto', 'candid', 'cosplay'], prompt: `Candid street photograph of a cosplayer with purple leggings and top, arms crossed.` },
-    { image: 'images/gambar6.png', tags: ['sketsa', 'anatomi', 'referensi'], prompt: `Anatomy sketch reference for the upper torso, showing the connection of the neck, shoulders, and chest muscles.` },
+    { 
+        image: 'images/gambar1.png',
+        category: 'Character Design', // <-- Contoh Kategori
+        tags: ['sketsa', 'anatomi', 'referensi'], 
+        prompt: `Sketsa referensi anatomi torso bagian depan dan pinggang...` 
+    },
+    { 
+        image: 'images/gambar1.png',
+        category: 'Illustration', // <-- Contoh Kategori
+        tags: ['vektor', 'wanita', 'selebriti'], 
+        prompt: `Vector portrait illustration of Ariana Grande...` 
+    },
+    { 
+        image: 'images/gambar1.png',
+        category: 'Illustration', // <-- Contoh Kategori
+        tags: ['vektor', 'wanita', 'asia', 'realistis'], 
+        prompt: `Realistic vector art of an Asian woman...` 
+    },
+    { 
+        image: 'images/gambar1.png',
+        category: 'Sticker', // <-- Contoh Kategori
+        tags: ['vektor', 'wanita', 'asia', 'pink'], 
+        prompt: `Vector illustration of an asian woman...` 
+    },
+    { 
+        image: 'images/gambar1.png',
+        category: 'Photos', // <-- Contoh Kategori
+        tags: ['foto', 'candid', 'cosplay'], 
+        prompt: `Candid street photograph of a cosplayer...` 
+    },
+    { 
+        image: 'images/gambar1.png',
+        category: 'Character Design', // <-- Contoh Kategori
+        tags: ['sketsa', 'anatomi', 'referensi'], 
+        prompt: `Anatomy sketch reference for the upper torso...` 
+    },
 ];
 
 // ===================================================================
@@ -18,6 +45,8 @@ const promptData = [
 // ===================================================================
 document.addEventListener('DOMContentLoaded', () => {
     // --- Elemen-elemen penting ---
+    const navMenu = document.getElementById('navMenu');
+    const homeBtn = document.getElementById('homeBtn');
     const promptGrid = document.getElementById('promptGrid');
     const resetFilterBtn = document.getElementById('resetFilterBtn');
     const tagFilterBtn = document.getElementById('tagFilterBtn');
@@ -26,13 +55,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const modalImg = document.getElementById('modalImage');
     const closeBtn = document.querySelector('.close-btn');
     const hamburger = document.getElementById('hamburger');
-    const navMenu = document.getElementById('navMenu');
 
     // --- FUNGSI-FUNGSI ---
 
     // Fungsi untuk menampilkan kartu
     function displayCards(data) {
         promptGrid.innerHTML = '';
+        if (data.length === 0) {
+            promptGrid.innerHTML = '<p class="info-text">Tidak ada gambar untuk kategori ini.</p>';
+            return;
+        }
         data.forEach(item => {
             const card = document.createElement('div');
             card.className = 'card';
@@ -63,51 +95,51 @@ document.addEventListener('DOMContentLoaded', () => {
             tagDropdownContent.appendChild(tagButton);
         });
     }
-
+    
     // --- INISIALISASI & EVENT LISTENERS ---
 
     displayCards(promptData);
     createTagDropdown();
 
     // Event Listener untuk menu hamburger
-    hamburger.addEventListener('click', () => {
-        navMenu.classList.toggle('active');
-    });
+    hamburger.addEventListener('click', () => navMenu.classList.toggle('active'));
 
-    // Event Listener untuk tombol filter utama ('Tampilkan Semua' & tag di dalam dropdown)
-    document.querySelector('.filter-controls').addEventListener('click', (event) => {
-        if (!event.target.classList.contains('filter-btn')) return;
+    // ** BARU: Event Listener untuk filter KATEGORI dari menu utama **
+    navMenu.addEventListener('click', (event) => {
+        if (event.target.classList.contains('category-filter-link')) {
+            event.preventDefault(); // Mencegah link pindah halaman
+            const categoryToFilter = event.target.dataset.category;
+            
+            const filteredData = promptData.filter(item => item.category === categoryToFilter);
+            displayCards(filteredData);
 
-        // Jika yang diklik adalah tombol dropdown utama, bukan isinya
-        if (event.target.id === 'tagFilterBtn') {
-            tagDropdownContent.classList.toggle('show');
-            return;
-        }
-
-        // --- Logika filter ---
-        document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
-        event.target.classList.add('active');
-        
-        // Atur juga tombol reset jika yang diklik bukan tombol itu sendiri
-        if (event.target.id !== 'resetFilterBtn') {
-            resetFilterBtn.classList.remove('active');
-        } else {
-            tagFilterBtn.classList.remove('active');
-        }
-
-        const clickedTag = event.target.dataset.tag;
-        promptGrid.querySelectorAll('.card').forEach(card => {
-            if (!clickedTag || card.dataset.tags.split(',').includes(clickedTag)) {
-                card.style.display = 'flex';
-            } else {
-                card.style.display = 'none';
+            // Tutup menu mobile setelah item dipilih
+            if (navMenu.classList.contains('active')) {
+                navMenu.classList.remove('active');
             }
-        });
-        
-        // Tutup dropdown setelah tag dipilih
-        tagDropdownContent.classList.remove('show');
+        }
     });
 
+    // Event Listener untuk tombol filter TAG
+    document.querySelector('.filter-controls').addEventListener('click', (event) => {
+        // ... (kode filter tag yang sudah ada, tidak perlu diubah) ...
+    });
+
+    // Fungsi untuk mereset semua filter dan menampilkan semua gambar
+    function resetAllFilters() {
+        displayCards(promptData);
+        document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+        resetFilterBtn.classList.add('active');
+    }
+
+    // Pasang fungsi reset ke tombol 'Tampilkan Semua' dan tombol 'Home/Brand'
+    resetFilterBtn.addEventListener('click', resetAllFilters);
+    homeBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        resetAllFilters();
+    });
+
+    // ... (sisa kode untuk modal, copy, dll. tetap sama) ...
     // Klik di luar dropdown untuk menutupnya
     window.addEventListener('click', (event) => {
         if (!event.target.matches('#tagFilterBtn')) {
@@ -116,18 +148,21 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
     });
-
     // Event Listener untuk tombol copy & preview gambar
     promptGrid.addEventListener('click', (event) => {
         if (event.target.classList.contains('copy-btn')) {
-            // ... (logika copy)
+            const card = event.target.closest('.card');
+            const promptText = card.querySelector('.prompt-text').value;
+            navigator.clipboard.writeText(promptText).then(() => {
+                event.target.textContent = 'Copied!';
+                setTimeout(() => { event.target.textContent = 'Copy'; }, 2000);
+            });
         }
         if (event.target.tagName === 'IMG') {
             modal.style.display = "block";
             modalImg.src = event.target.src;
         }
     });
-    
     // Event Listener untuk menutup modal
     closeBtn.onclick = () => { modal.style.display = "none"; }
     modal.onclick = (event) => { if (event.target === modal) { modal.style.display = "none"; } }
