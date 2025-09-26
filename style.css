@@ -64,6 +64,37 @@ body {
 .filter-btn { background-color: transparent; border: 1px solid var(--border-color); color: var(--subtle-text); padding: 8px 16px; border-radius: 20px; cursor: pointer; transition: all 0.2s ease; font-size: 14px; font-family: 'Inter', sans-serif; }
 .filter-btn.active { background-color: var(--accent-color); border-color: var(--accent-color); color: white; font-weight: 500; }
 
+
+
+
+/* --- Search Bar --- */
+.search-container {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+#searchInput {
+    width: 60%;
+    max-width: 500px;
+    padding: 10px 16px;
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+#searchInput:focus {
+    border-color: var(--accent-color);
+    box-shadow: 0 0 4px rgba(0, 123, 255, 0.3);
+}
+
+
+
+
+
+
 /* Gaya Dropdown untuk Filter Tag */
 .tag-dropdown { position: relative; }
 .tag-dropdown .dropdown-content {
