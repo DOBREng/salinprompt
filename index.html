@@ -12,51 +12,25 @@
 <body>
 
     <nav class="navbar">
-    <div class="nav-brand">
-        <a href="https://dobreng.github.io/" id="homeBtn">PromptFolio</a>
-    </div>
-    <ul class="nav-menu" id="navMenu">
-        <li class="nav-item dropdown">
-            <a href="#">Design ▼</a>
-            <ul class="dropdown-content">
-                <li><a href="#" class="category-filter-link" data-category="Design">Design</a></li>
-                <li><a href="#" class="category-filter-link" data-category="Diagram">Diagram</a></li>
-                <li><a href="#" class="category-filter-link" data-category="Infographic">Infographic</a></li>
-                <li><a href="#" class="category-filter-link" data-category="Mockup">Mockup</a></li>
-                <li><a href="#" class="category-filter-link" data-category="Product">Product</a></li>
-                <li><a href="#" class="category-filter-link" data-category="Typography">Typography</a></li>
-            </ul>
-        </li>
-        <li class="nav-item dropdown">
-            <a href="#">ETC ▼</a>
-            <ul class="dropdown-content">
-                <li><a href="#" class="category-filter-link" data-category="ETC">ETC</a></li>
-            </ul>
-        </li>
-        <li class="nav-item dropdown">
-            <a href="#">Illustration ▼</a>
-            <ul class="dropdown-content">
-                <li><a href="#" class="category-filter-link" data-category="3D">3D</a></li>
-                <li><a href="#" class="category-filter-link" data-category="Anime">Anime</a></li>
-                <li><a href="#" class="category-filter-link" data-category="Building">Building</a></li>
-                <li><a href="#" class="category-filter-link" data-category="Character Design">Character Design</a></li>
-                <li><a href="#" class="category-filter-link" data-category="Comic">Comic</a></li>
-                <li><a href="#" class="category-filter-link" data-category="Cute">Cute</a></li>
-                <li><a href="#" class="category-filter-link" data-category="Illustration">Illustration</a></li>
-                <li><a href="#" class="category-filter-link" data-category="Industry">Industry</a></li>
-                <li><a href="#" class="category-filter-link" data-category="Sticker">Sticker</a></li>
-                <li><a href="#" class="category-filter-link" data-category="Street">Street</a></li>
-            </ul>
-        </li>
-        <li class="nav-item"><a href="#" class="category-filter-link" data-category="Photos">Photos</a></li>
-        <li class="nav-item"><a href="#" class="category-filter-link" data-category="Nano Banana">Nano Banana</a></li>
-    </ul>
-    <button class="hamburger" id="hamburger">
-        <span></span>
-        <span></span>
-        <span></span>
-    </button>
-</nav>
+        <div class="nav-brand">
+            <a href="#" id="homeBtn">PromptFolio</a>
+        </div>
+        <ul class="nav-menu" id="navMenu">
+            <li class="nav-item dropdown"> <a href="#">Design ▼</a> <ul class="dropdown-content"> <li><a href="#" class="category-filter-link" data-category="Design">Design</a></li> <li><a href="#" class="category-filter-link" data-category="Diagram">Diagram</a></li> </ul> </li>
+            <li class="nav-item dropdown"> <a href="#">Illustration ▼</a> <ul class="dropdown-content"> <li><a href="#" class="category-filter-link" data-category="Anime">Anime</a></li> <li><a href="#" class="category-filter-link" data-category="Character Design">Character Design</a></li> </ul> </li>
+            <li class="nav-item"><a href="#" class="category-filter-link" data-category="Photos">Photos</a></li>
+        </ul>
+
+        <div class="search-container">
+            <input type="search" id="searchInput" placeholder="Cari prompt...">
+        </div>
+
+        <button class="hamburger" id="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </nav>
 
     <header class="main-header">
         <h1>Koleksi Prompt Saya</h1>
@@ -64,16 +38,13 @@
             <button id="resetFilterBtn" class="filter-btn active">Tampilkan Semua</button>
             <div class="tag-dropdown">
                 <button id="tagFilterBtn" class="filter-btn">Filter by Tag ▼</button>
-                <div id="tagDropdownContent" class="dropdown-content tag-list">
-                    </div>
+                <div id="tagDropdownContent" class="dropdown-content tag-list"></div>
             </div>
         </div>
     </header>
-
     <main>
         <div class="prompt-grid" id="promptGrid"></div>
     </main>
-
     <div id="imageModal" class="modal">
         <span class="close-btn">&times;</span>
         <img class="modal-content" id="modalImage">
