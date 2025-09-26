@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Koleksi Prompt Pribadi</title>
+    <title>SalinPrompt</title>
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -14,6 +14,8 @@
     <nav class="navbar">
     
     <ul class="nav-menu" id="navMenu">
+
+	<li id="homeBtn" class="nav-item"><a href="#"  >Home</a></li>
         <li class="nav-item dropdown">
             <a href="#">Design ▼</a>
             <ul class="dropdown-content">
@@ -55,13 +57,16 @@
         <span></span>
         <span></span>
     </button>
+	
+	<button id="backToTopBtn" title="Kembali ke atas">↑</button>
+
 	<div class="nav-brand">
         <a href="https://dobreng.github.io/" id="homeBtn">PromptFolio</a>
     </div>
 </nav>
 
     <header class="main-header">
-    <h1>Koleksi Prompt Saya</h1>
+    <h1>SalinPrompt</h1>
     <div class="filter-controls">
         <button id="resetFilterBtn" class="filter-btn active">Tampilkan Semua</button>
         <div class="tag-dropdown">
@@ -79,6 +84,7 @@
 
     <main>
         <div class="prompt-grid" id="promptGrid"></div>
+		<div class="pagination" id="pagination"></div>
     </main>
 
     <div id="imageModal" class="modal">
