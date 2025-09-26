@@ -4,7 +4,7 @@
 const promptData = [
     { 
         image: 'images/gambar1.png',
-        category: 'Character Design', // <-- Contoh Kategori
+        category: 'Anime', // <-- Contoh Kategori
         tags: ['sketsa', 'anatomi', 'referensi'], 
         prompt: `Sketsa referensi anatomi torso bagian depan dan pinggang...` 
     },
