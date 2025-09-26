@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Koleksi Prompt Pribadi</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="nav-brand">
+            <a href="#">PromptFolio</a>
+        </div>
+        <ul class="nav-menu" id="navMenu">
+            <li class="nav-item dropdown">
+                <a href="#">Design ▼</a>
+                <ul class="dropdown-content">
+                    <li><a href="#">Design</a></li>
+                    <li><a href="#">Diagram</a></li>
+                    <li><a href="#">Infographic</a></li>
+                    <li><a href="#">Mockup</a></li>
+                    <li><a href="#">Product</a></li>
+                    <li><a href="#">Typography</a></li>
+                </ul>
+            </li>
+            <li class="nav-item dropdown">
+                <a href="#">ETC ▼</a>
+                <ul class="dropdown-content">
+                    <li><a href="#">ETC</a></li>
+                </ul>
+            </li>
+            <li class="nav-item dropdown">
+                <a href="#">Illustration ▼</a>
+                <ul class="dropdown-content">
+                    <li><a href="#">3D</a></li>
+                    <li><a href="#">Anime</a></li>
+                    <li><a href="#">Building</a></li>
+                    <li><a href="#">Character Design</a></li>
+                    <li><a href="#">Comic</a></li>
+                    <li><a href="#">Cute</a></li>
+                    <li><a href="#">Illustration</a></li>
+                    <li><a href="#">Industry</a></li>
+                    <li><a href="#">Sticker</a></li>
+                    <li><a href="#">Street</a></li>
+                </ul>
+            </li>
+            <li class="nav-item"><a href="#">Photos</a></li>
+            <li class="nav-item"><a href="#">Nano Banana</a></li>
+        </ul>
+        <button class="hamburger" id="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </nav>
+
+    <header class="main-header">
+        <h1>Koleksi Prompt Saya</h1>
+        <div class="filter-controls">
+            <button id="resetFilterBtn" class="filter-btn active">Tampilkan Semua</button>
+            <div class="tag-dropdown">
+                <button id="tagFilterBtn" class="filter-btn">Filter by Tag ▼</button>
+                <div id="tagDropdownContent" class="dropdown-content tag-list">
+                    </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="prompt-grid" id="promptGrid"></div>
+    </main>
+
+    <div id="imageModal" class="modal">
+        <span class="close-btn">&times;</span>
+        <img class="modal-content" id="modalImage">
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
