@@ -59,16 +59,21 @@
 </nav>
 
     <header class="main-header">
-        <h1>Koleksi Prompt Saya</h1>
-        <div class="filter-controls">
-            <button id="resetFilterBtn" class="filter-btn active">Tampilkan Semua</button>
-            <div class="tag-dropdown">
-                <button id="tagFilterBtn" class="filter-btn">Filter by Tag ▼</button>
-                <div id="tagDropdownContent" class="dropdown-content tag-list">
-                    </div>
-            </div>
+    <h1>Koleksi Prompt Saya</h1>
+    <div class="filter-controls">
+        <button id="resetFilterBtn" class="filter-btn active">Tampilkan Semua</button>
+        <div class="tag-dropdown">
+            <button id="tagFilterBtn" class="filter-btn">Filter by Tag ▼</button>
+            <div id="tagDropdownContent" class="dropdown-content tag-list"></div>
         </div>
-    </header>
+    </div>
+
+    <!-- 🔍 Search Bar Baru -->
+    <div class="search-container">
+        <input type="text" id="searchInput" placeholder="Cari prompt atau tag...">
+    </div>
+</header>
+
 
     <main>
         <div class="prompt-grid" id="promptGrid"></div>
