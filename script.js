@@ -28,6 +28,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- FUNGSI-FUNGSI ---
 
+
+
+
+// --- Search Function ---
+const searchInput = document.getElementById('searchInput');
+searchInput.addEventListener('input', () => {
+    const keyword = searchInput.value.toLowerCase();
+    const filteredData = promptData.filter(item => 
+        item.prompt.toLowerCase().includes(keyword) ||
+        item.tags.some(tag => tag.toLowerCase().includes(keyword)) ||
+        item.category.toLowerCase().includes(keyword)
+    );
+    displayCards(filteredData);
+
+    // Reset tombol aktif agar jelas ini hasil pencarian
+    document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+});
+
+
+
+
     function displayCards(data) {
         promptGrid.innerHTML = '';
         if (data.length === 0) {
