@@ -4,36 +4,36 @@
 const promptData = [
     { 
         image: 'images/gambar1.png',
-        category: 'Character Design', // <-- Contoh Kategori
+        category: 'Anime', // <-- Contoh Kategori
         tags: ['sketsa', 'anatomi', 'referensi'], 
         prompt: `Sketsa referensi anatomi torso bagian depan dan pinggang...` 
     },
     { 
-        image: 'images/gambar1.png',
+        image: 'images/gambar2.png',
         category: 'Illustration', // <-- Contoh Kategori
         tags: ['vektor', 'wanita', 'selebriti'], 
         prompt: `Vector portrait illustration of Ariana Grande...` 
     },
     { 
-        image: 'images/gambar1.png',
+        image: 'images/gambar3.png',
         category: 'Illustration', // <-- Contoh Kategori
         tags: ['vektor', 'wanita', 'asia', 'realistis'], 
         prompt: `Realistic vector art of an Asian woman...` 
     },
     { 
-        image: 'images/gambar1.png',
+        image: 'images/gambar4.png',
         category: 'Sticker', // <-- Contoh Kategori
         tags: ['vektor', 'wanita', 'asia', 'pink'], 
         prompt: `Vector illustration of an asian woman...` 
     },
     { 
-        image: 'images/gambar1.png',
+        image: 'images/gambar5.png',
         category: 'Photos', // <-- Contoh Kategori
         tags: ['foto', 'candid', 'cosplay'], 
         prompt: `Candid street photograph of a cosplayer...` 
     },
     { 
-        image: 'images/gambar1.png',
+        image: 'images/gambar6.png',
         category: 'Character Design', // <-- Contoh Kategori
         tags: ['sketsa', 'anatomi', 'referensi'], 
         prompt: `Anatomy sketch reference for the upper torso...` 
