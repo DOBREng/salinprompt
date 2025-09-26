@@ -1,140 +1,164 @@
 // ===================================================================
-// PUSAT DATA ANDA
+// PUSAT DATA ANDA (Isi dengan data Anda yang sudah ada 'category')
 // ===================================================================
 const promptData = [
-    // Isi dengan data Anda
-    { image: 'images/gambar1.png', category: 'Anime', tags: ['sketsa', 'anatomi', 'referensi'], prompt: `Sketsa referensi anatomi torso...` },
-    { image: 'images/gambar2.png', category: 'Illustration', tags: ['vektor', 'wanita', 'selebriti'], prompt: `Vector portrait illustration of Ariana Grande...` },
-    // ...tambahkan lebih banyak data untuk mencoba paginasi...
+    { image: 'images/gambar1.png', category: 'Anime', tags: ['sketsa', 'anatomi', 'referensi'], prompt: `Sketsa referensi anatomi torso bagian depan...` },
+    { image: 'images/gambar2.png', category: 'Illustration', tags: ['vektor', 'wanita', 'selebriti'], prompt: `Vector portrait illustration of Ariana Grande...` },
+    { image: 'images/gambar3.png', category: 'Illustration', tags: ['vektor', 'wanita', 'asia', 'realistis'], prompt: `Realistic vector art of an Asian woman...` },
+    { image: 'images/gambar4.png', category: 'Sticker', tags: ['vektor', 'wanita', 'asia', 'pink'], prompt: `Vector illustration of an asian woman...` },
+    { image: 'images/gambar5.png', category: 'Photos', tags: ['foto', 'candid', 'cosplay'], prompt: `Candid street photograph of a cosplayer...` },
+    { image: 'images/gambar6.png', category: 'Character Design', tags: ['sketsa', 'anatomi', 'referensi'], prompt: `Anatomy sketch reference for the upper torso...` },
 ];
 
 // ===================================================================
 // KODE INTI WEBSITE
 // ===================================================================
 document.addEventListener('DOMContentLoaded', () => {
-    // --- Elemen-elemen penting ---
-    const promptGrid = document.getElementById('promptGrid');
-    const paginationControls = document.getElementById('paginationControls');
-    const searchInput = document.getElementById('searchInput');
-    const backToTopBtn = document.getElementById('backToTopBtn');
-    // ...elemen lain yang sudah ada...
-    const navMenu = document.getElementById('navMenu');
-    const homeBtn = document.getElementById('homeBtn');
-    const resetFilterBtn = document.getElementById('resetFilterBtn');
-    const tagFilterBtn = document.getElementById('tagFilterBtn');
-    const tagDropdownContent = document.getElementById('tagDropdownContent');
-    const modal = document.getElementById('imageModal');
-    const modalImg = document.getElementById('modalImage');
-    const closeBtn = document.querySelector('.close-btn');
-    const hamburger = document.getElementById('hamburger');
+    // --- Elemen-elemen penting ---
+    const navMenu = document.getElementById('navMenu');
+    const homeBtn = document.getElementById('homeBtn'); // Kita butuh ini untuk mereset
+    const promptGrid = document.getElementById('promptGrid');
+    const resetFilterBtn = document.getElementById('resetFilterBtn');
+    const tagFilterBtn = document.getElementById('tagFilterBtn');
+    const tagDropdownContent = document.getElementById('tagDropdownContent');
+    const modal = document.getElementById('imageModal');
+    const modalImg = document.getElementById('modalImage');
+    const closeBtn = document.querySelector('.close-btn');
+    const hamburger = document.getElementById('hamburger');
 
-    // --- State Aplikasi ---
-    let currentPage = 1;
-    const cardsPerPage = 6; // Ubah angka ini untuk jumlah kartu per halaman
-    let currentFilterData = [...promptData];
+    // --- FUNGSI-FUNGSI ---
 
-    // --- FUNGSI-FUNGSI ---
-
-    // FUNGSI UTAMA: Menampilkan kartu dan paginasi
-    function renderPage() {
+    function displayCards(data) {
         promptGrid.innerHTML = '';
-        paginationControls.innerHTML = '';
-
-        if (currentFilterData.length === 0) {
-            promptGrid.innerHTML = '<p class="info-text">Tidak ada hasil yang cocok.</p>';
+        if (data.length === 0) {
+            promptGrid.innerHTML = '<p class="info-text">Tidak ada gambar untuk filter ini.</p>';
             return;
         }
+        data.forEach(item => {
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.dataset.tags = item.tags.join(',');
+            let tagsHTML = '';
+            item.tags.forEach(tag => { tagsHTML += `<span class="tag">${tag}</span>`; });
+            card.innerHTML = `
+                <img src="${item.image}" alt="Gambar prompt">
+                <div class="card-content">
+                    <div class="tags">${tagsHTML}</div>
+                    <textarea class="prompt-text" readonly>${item.prompt}</textarea>
+                    <button class="copy-btn">Copy</button>
+                </div>`;
+            promptGrid.appendChild(card);
+        });
+    }
 
-        // 1. Logika untuk memotong data sesuai halaman
-        const startIndex = (currentPage - 1) * cardsPerPage;
-        const endIndex = startIndex + cardsPerPage;
-        const paginatedItems = currentFilterData.slice(startIndex, endIndex);
+    function createTagDropdown() {
+        // ... (fungsi ini tidak berubah, sudah benar) ...
+        const allTags = promptData.flatMap(item => item.tags);
+        const uniqueTags = [...new Set(allTags)];
+        tagDropdownContent.innerHTML = '';
+        uniqueTags.sort().forEach(tag => {
+            const tagButton = document.createElement('button');
+            tagButton.className = 'filter-btn';
+            tagButton.textContent = tag;
+            tagButton.dataset.tag = tag;
+            tagDropdownContent.appendChild(tagButton);
+        });
+    }
 
-        // 2. Tampilkan kartu untuk halaman ini
-        paginatedItems.forEach(item => {
-            const card = document.createElement('div');
-            card.className = 'card';
-            card.dataset.tags = item.tags.join(',');
-            let tagsHTML = '';
-            item.tags.forEach(tag => { tagsHTML += `<span class="tag">${tag}</span>`; });
-            card.innerHTML = `
-                <img src="${item.image}" alt="Gambar prompt">
-                <div class="card-content">
-                    <div class="tags">${tagsHTML}</div>
-                    <textarea class="prompt-text" readonly>${item.prompt}</textarea>
-                    <button class="copy-btn">Copy</button>
-                </div>`;
-            promptGrid.appendChild(card);
-        });
+    // --- INISIALISASI & EVENT LISTENERS ---
 
-        // 3. Buat tombol paginasi
-        const pageCount = Math.ceil(currentFilterData.length / cardsPerPage);
-        for (let i = 1; i <= pageCount; i++) {
-            const pageBtn = document.createElement('button');
-            pageBtn.className = 'pagination-btn';
-            pageBtn.textContent = i;
-            if (i === currentPage) {
-                pageBtn.classList.add('active');
-            }
-            pageBtn.addEventListener('click', () => {
-                currentPage = i;
-                renderPage();
-                window.scrollTo(0, 0);
-            });
-            paginationControls.appendChild(pageBtn);
-        }
-    }
+    displayCards(promptData);
+    createTagDropdown();
 
-    function applyFilters() {
-        const searchTerm = searchInput.value.toLowerCase().trim();
-        // NOTE: Untuk sementara, kita reset filter kategori/tag saat mencari
-        // Atau kita bisa buat logika yang lebih kompleks nanti
-        
-        currentFilterData = promptData.filter(item => {
-            const inSearch = searchTerm === '' ||
-                             item.prompt.toLowerCase().includes(searchTerm) ||
-                             item.tags.join(' ').toLowerCase().includes(searchTerm);
-            return inSearch; // Tambahkan filter lain di sini jika perlu
-        });
-        
-        currentPage = 1;
-        renderPage();
-    }
+    // Event Listener untuk menu hamburger (tidak berubah)
+    hamburger.addEventListener('click', () => navMenu.classList.toggle('active'));
     
-    // ...fungsi lain seperti createTagDropdown tidak berubah...
-    function createTagDropdown() { /* ... */ }
-
-    // --- INISIALISASI & EVENT LISTENERS ---
-
-    renderPage(); // Ganti displayCards dengan renderPage
-    createTagDropdown();
-
-    // Event Listener untuk PENCARIAN
-    searchInput.addEventListener('input', applyFilters);
-
-    // Event Listener untuk Tombol Kembali ke Atas
-    window.onscroll = () => {
-        if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
-            backToTopBtn.style.display = "block";
-        } else {
-            backToTopBtn.style.display = "none";
-        }
-    };
-    backToTopBtn.addEventListener('click', () => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
-
-    // Sesuaikan listener filter yang ada untuk menggunakan sistem baru
+    // ===================================================================
+    // KODE BARU: LOGIKA FILTER KATEGORI
+    // ===================================================================
     navMenu.addEventListener('click', (event) => {
+        // Hanya jalankan jika yang diklik adalah link filter kategori
         if (event.target.classList.contains('category-filter-link')) {
-            event.preventDefault();
+            event.preventDefault(); 
             const categoryToFilter = event.target.dataset.category;
-            currentFilterData = promptData.filter(item => item.category === categoryToFilter);
-            currentPage = 1;
-            renderPage();
-            // ...sisa logika menu...
+            
+            // Filter data utama berdasarkan kategori yang diklik
+            const filteredData = promptData.filter(item => item.category === categoryToFilter);
+            
+            // Tampilkan kartu yang sudah difilter
+            displayCards(filteredData);
+
+            // Reset status aktif pada tombol filter tag
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            
+            // Tutup menu mobile setelah item dipilih
+            if (navMenu.classList.contains('active')) {
+                navMenu.classList.remove('active');
+            }
         }
     });
 
-    // ...sisa event listener disesuaikan untuk memanggil renderPage() atau applyFilters()...
+    // ===================================================================
+    // KODE LAMA ANDA UNTUK FILTER TAG (TETAP BERFUNGSI NORMAL)
+    // ===================================================================
+    document.querySelector('.filter-controls').addEventListener('click', (event) => {
+        if (!event.target.classList.contains('filter-btn')) return;
+
+        if (event.target.id === 'tagFilterBtn') {
+            tagDropdownContent.classList.toggle('show');
+            return;
+        }
+
+        document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+        event.target.classList.add('active');
+        
+        if (event.target.id !== 'resetFilterBtn') {
+            resetFilterBtn.classList.remove('active');
+        } else {
+            // Jika "Tampilkan Semua" diklik, tampilkan semua data
+            displayCards(promptData);
+            tagFilterBtn.classList.remove('active');
+            return; // Hentikan fungsi di sini
+        }
+
+        const clickedTag = event.target.dataset.tag;
+        // Saat filter tag, kita akan memfilter dari SEMUA data
+        const filteredByTag = promptData.filter(item => item.tags.includes(clickedTag));
+        displayCards(filteredByTag);
+        
+        tagDropdownContent.classList.remove('show');
+    });
+    
+    // Menambahkan listener ke tombol Home/Brand untuk mereset
+    homeBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        displayCards(promptData);
+        document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+        resetFilterBtn.classList.add('active');
+    });
+
+    // ... Sisa kode tidak berubah (klik di luar dropdown, copy, modal) ...
+    window.addEventListener('click', (event) => {
+        if (!event.target.matches('#tagFilterBtn') && !tagFilterBtn.contains(event.target)) {
+            if (tagDropdownContent.classList.contains('show')) {
+                tagDropdownContent.classList.remove('show');
+            }
+        }
+    });
+    promptGrid.addEventListener('click', (event) => {
+        if (event.target.classList.contains('copy-btn')) {
+            const card = event.target.closest('.card');
+            const promptText = card.querySelector('.prompt-text').value;
+            navigator.clipboard.writeText(promptText).then(() => {
+                event.target.textContent = 'Copied!';
+                setTimeout(() => { event.target.textContent = 'Copy'; }, 2000);
+            });
+        }
+        if (event.target.tagName === 'IMG') {
+            modal.style.display = "block";
+            modalImg.src = event.target.src;
+        }
+    });
+    closeBtn.onclick = () => { modal.style.display = "none"; }
+    modal.onclick = (event) => { if (event.target === modal) { modal.style.display = "none"; } }
 });
