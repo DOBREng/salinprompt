@@ -2,7 +2,10 @@
 // PUSAT DATA ANDA
 // ===================================================================
 const promptData = [
-    { image: 'images/gambar1.png', tags: ['sketsa', 'anatomi', 'referensi'], prompt: `Sketsa referensi anatomi torso bagian depan dan pinggang dengan penekanan pada otot oblique.` },
+    { image: 'images/gambar1.png', 
+     tags: ['sketsa', 'anatomi', 'referensi'], 
+     category: 'Illustration',
+     prompt: `Sketsa referensi anatomi torso bagian depan dan pinggang dengan penekanan pada otot oblique.` },
     { image: 'images/gambar2.png', tags: ['vektor', 'wanita', 'selebriti'], prompt: `Vector portrait illustration of Ariana Grande, flat cell shading, bold separated color blocks, no gradients, orange background.` },
     { image: 'images/gambar3.png', tags: ['vektor', 'wanita', 'asia', 'realistis'], prompt: `Realistic vector art of an Asian woman with long dark hair, wearing a black top and fishnet gloves, looking at the camera.` },
     { image: 'images/gambar4.png', tags: ['vektor', 'wanita', 'asia', 'pink'], prompt: `Vector illustration of an asian woman with dark hair, looking down, wearing a pink shirt.` },
