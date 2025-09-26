@@ -31,6 +31,122 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
+
+    // Tombol Back to Top
+    const backToTopBtn = document.getElementById('backToTopBtn');
+
+    window.addEventListener('scroll', () => {
+        if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+            backToTopBtn.style.display = "block";
+        } else {
+            backToTopBtn.style.display = "none";
+        }
+    });
+
+    backToTopBtn.addEventListener('click', () => {
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+    });
+
+
+
+
+
+
+
+
+
+
+    // --- Pagination Setup ---
+    const itemsPerPage = 6; // berapa card per halaman
+    let currentPage = 1;
+
+    function displayCardsWithPagination(data, page = 1) {
+        const start = (page - 1) * itemsPerPage;
+        const end = start + itemsPerPage;
+        const paginatedData = data.slice(start, end);
+
+        displayCards(paginatedData);
+        renderPagination(data.length, page);
+    }
+
+    function renderPagination(totalItems, page) {
+        const pageCount = Math.ceil(totalItems / itemsPerPage);
+        const pagination = document.getElementById('pagination');
+        pagination.innerHTML = '';
+
+        // Tombol Prev
+        const prevBtn = document.createElement('button');
+        prevBtn.textContent = '<';
+        prevBtn.disabled = page === 1;
+        prevBtn.addEventListener('click', () => {
+            if (page > 1) {
+                currentPage--;
+                displayCardsWithPagination(promptData, currentPage);
+            }
+        });
+        pagination.appendChild(prevBtn);
+
+        // Nomor halaman
+        for (let i = 1; i <= pageCount; i++) {
+            const pageBtn = document.createElement('button');
+            pageBtn.textContent = i;
+            if (i === page) pageBtn.classList.add('active');
+            pageBtn.addEventListener('click', () => {
+                currentPage = i;
+                displayCardsWithPagination(promptData, currentPage);
+            });
+            pagination.appendChild(pageBtn);
+        }
+
+        // Tombol Next
+        const nextBtn = document.createElement('button');
+        nextBtn.textContent = '>';
+        nextBtn.disabled = page === pageCount;
+        nextBtn.addEventListener('click', () => {
+            if (page < pageCount) {
+                currentPage++;
+                displayCardsWithPagination(promptData, currentPage);
+            }
+        });
+        pagination.appendChild(nextBtn);
+    }
+
+    // Replace awal: displayCards(promptData);
+    displayCardsWithPagination(promptData, currentPage);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // --- Search Function ---
 const searchInput = document.getElementById('searchInput');
 searchInput.addEventListener('input', () => {
