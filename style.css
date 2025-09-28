@@ -3,13 +3,13 @@
 /* =================================================================== */
 :root {
     --background-color: #f7f9f8;    /* putih kehijauan lembut */
-    --card-background: #ffffff;     /* putih bersih untuk card */
-    --text-color: #2f3e35;          /* hijau gelap untuk teks utama */
-    --subtle-text: #7a8c80;          /* sage abu-abu untuk teks halus */
-    --border-color: #dce3df;        /* abu-abu kehijauan untuk border */
-    --accent-color: #8fb996;        /* pastel sage hijau */
+    --card-background: #ffffff;      /* putih bersih untuk card */
+    --text-color: #2f3e35;           /* hijau gelap untuk teks utama */
+    --subtle-text: #7a8c80;         /* sage abu-abu untuk teks halus */
+    --border-color: #dce3df;         /* abu-abu kehijauan untuk border */
+    --accent-color: #8fb996;         /* pastel sage hijau */
     --accent-gradient: linear-gradient(135deg, #8fb996, #b5d1c6);
-    --navbar-bg: #ffffff;           /* navbar tetap clean */
+    --navbar-bg: #ffffff;            /* navbar tetap clean */
     --navbar-shadow: rgba(143, 185, 150, 0.2);
 }
 
@@ -22,7 +22,7 @@ body {
     background-color: var(--background-color);
     color: var(--text-color);
     margin: 0;
-    padding-top: 80px; /* Memberi ruang lebih untuk navbar */
+    padding-top: 80px;
 }
 
 ::-webkit-scrollbar {
@@ -40,8 +40,11 @@ body {
 /* 2. NAVBAR & MENU NAVIGASI
 /* =================================================================== */
 .navbar {
-    background-color: var(--navbar-bg);
-    box-shadow: 0 2px 4px var(--navbar-shadow);
+    background-color: rgba(247, 249, 248, 0.65);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    box-shadow: none;
+    border-bottom: 1px solid var(--border-color);
     padding: 0 24px;
     display: flex;
     justify-content: space-between;
@@ -112,7 +115,19 @@ body {
     background-color: #f0f3f1;
 }
 
-.dropdown:hover .dropdown-content {
+/* GANTI BLOK LAMA DENGAN YANG BARU INI */
+
+/* Aturan :hover ini hanya akan aktif di layar lebar (desktop) */
+@media (min-width: 993px) {
+    .dropdown:hover .dropdown-content {
+        display: block;
+    }
+}
+
+/* TAMBAHKAN BLOK BARU INI */
+
+/* Class ini akan kita gunakan di JavaScript untuk menampilkan dropdown di mobile */
+.dropdown-content.show {
     display: block;
 }
 
@@ -125,10 +140,10 @@ body {
 
 .prompt-total-display {
     text-align: right;
-    padding-right: 24px;
+    padding-top: 24px;
     box-sizing: border-box;
     margin-bottom: 20px;
-    font-size: 1rem;
+    font-size: 0.9rem;
     color: var(--subtle-text);
 }
 
@@ -197,7 +212,7 @@ body {
 
 .tag-dropdown .dropdown-content {
     margin-top: 5px;
-    max-height: 300px;
+    max-height: 250px;
     overflow-y: auto;
 }
 
@@ -239,6 +254,13 @@ main {
     display: flex;
     flex-direction: column;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+    opacity: 0;
+    animation: fadeInUp 1s ease-out forwards;
+    
+    /* TAMBAHKAN BARIS INI sebagai posisi default setelah animasi */
+    transform: translateY(0); 
+	will-change: transform;
 }
 
 .card:hover {
@@ -315,7 +337,6 @@ main {
     transform: scale(0.96);
 }
 
-/* --- Efek Hover Gambar --- */
 .card-image-container {
     position: relative;
     width: 100%;
@@ -468,7 +489,7 @@ main {
         border: none;
         cursor: pointer;
         padding: 0;
-        z-index: 1001; /* Di atas navbar */
+        z-index: 1001;
     }
     
     .hamburger span {
@@ -518,6 +539,7 @@ main {
     }
 }
 
+/* --- GANTI DENGAN KODE BARU INI --- */
 @media (max-width: 768px) {
     main {
         padding: 0 8px 8px 8px;
@@ -543,7 +565,286 @@ main {
         line-height: 1.3;
     }
 
-    .tags, .prompt-text, .copy-btn {
+    /* PERUBAHAN UTAMANYA DI SINI */
+    /* Kita hanya menyembunyikan elemen di dalam kartu, bukan di dalam popup */
+    .card .tags, .card .prompt-text, .card .copy-btn {
         display: none;
     }
+}
+
+/* ================== GAYA BARU UNTUK LABEL "ORIGINAL" ================== */
+.original-label {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 3;
+    background-color: rgba(0, 0, 0, 0.6);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    opacity: 0;
+    transition: opacity 0.35s ease-in-out;
+    pointer-events: none;
+}
+
+.card-image-container:hover .original-label {
+    opacity: 1;
+}
+
+/* ================== GAYA SCROLLBAR KUSTOM UNTUK DROPDOWN TAG ================== */
+.tag-dropdown .dropdown-content::-webkit-scrollbar {
+    width: 8px;
+}
+.tag-dropdown .dropdown-content::-webkit-scrollbar-track {
+    background: #f0f3f1;
+    border-radius: 4px;
+}
+.tag-dropdown .dropdown-content::-webkit-scrollbar-thumb {
+    background: var(--accent-color);
+    border-radius: 4px;
+}
+.tag-dropdown .dropdown-content::-webkit-scrollbar-thumb:hover {
+    background: #7aa883;
+}
+
+/* =================================================================== */
+/* 7. GAYA BARU UNTUK MODAL DETAIL PROMPT
+/* =================================================================== */
+.modal-prompt {
+    position: fixed;
+    z-index: 3000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    box-sizing: border-box;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.modal-prompt.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-prompt-content {
+    background-color: var(--card-background);
+    border-radius: 16px;
+    overflow: hidden;
+    width: 100%;
+    max-width: 450px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    transform: scale(0.95);
+    transition: transform 0.3s ease;
+}
+
+.modal-prompt.show .modal-prompt-content {
+    transform: scale(1);
+}
+
+.modal-prompt-close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    color: var(--card-background);
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    z-index: 10;
+    transition: color 0.2s ease;
+}
+
+.modal-prompt-close:hover {
+    color: var(--text-color);
+}
+
+.modal-prompt-content img {
+    width: 100%;
+    height: auto;
+    max-height: 40vh;
+    object-fit: cover;
+    display: block;
+}
+
+.modal-prompt-details {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+#promptModalTags {
+    margin-bottom: 0;
+}
+
+#promptModalText {
+    width: 100%;
+    height: 150px;
+    box-sizing: border-box;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    resize: none;
+    background-color: #fdfdfd;
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--text-color);
+    padding: 8px;
+    font-family: 'Inter', sans-serif;
+}
+
+.modal-prompt-actions {
+    display: flex;
+    justify-content: flex-end;
+}
+
+#promptModalCopyBtn {
+    background: var(--accent-gradient);
+    color: #fff;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 6px rgba(143, 185, 150, 0.25);
+}
+
+#promptModalCopyBtn:hover {
+    box-shadow: 0 4px 10px rgba(143, 185, 150, 0.3);
+    transform: translateY(-2px);
+}
+
+
+/* =================================================================== */
+/* 8. GAYA BARU UNTUK NAVIGASI GAMBAR DI MODAL
+/* =================================================================== */
+
+.modal-image-container {
+    position: relative;
+    width: 100%;
+    height: 45vh; /* Kita set tinggi kontainer agar konsisten */
+    background-color: #2c332e; /* Latar belakang lebih gelap agar terlihat elegan */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Cari dan GANTI juga blok kode ini */
+.modal-image-container img {
+    width: 100%;
+    height: 100%;
+    /* Kunci utamanya adalah 'contain' */
+    object-fit: contain;
+    display: block;
+}
+
+.modal-nav-btn {
+    display: none; /* Sembunyi secara default */
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.4);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    line-height: 36px; /* Menengahkan ikon panah secara vertikal */
+    padding: 0;
+    text-align: center;
+}
+
+.modal-nav-btn:hover {
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+.modal-nav-btn.prev {
+    left: 10px;
+}
+
+.modal-nav-btn.next {
+    right: 10px;
+}
+
+
+/* =================================================================== */
+/* 9. GAYA BARU UNTUK LABEL "ORIGINAL" DI DALAM MODAL
+/* =================================================================== */
+
+.original-label-modal {
+    display: none; /* Sembunyi secara default, diatur oleh JS */
+    position: absolute;
+    top: 10px;
+    left: 15px;
+    z-index: 10; /* Pastikan di atas gambar tapi di bawah tombol tutup */
+    background-color: rgba(0, 0, 0, 0.6);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 15px;
+    font-weight: 600;
+    pointer-events: none; /* Agar tidak bisa diklik */
+}
+
+
+/* =================================================================== */
+/* 10. GAYA BARU UNTUK JUDUL DI DALAM MODAL
+/* =================================================================== */
+
+#promptModalTitle {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-top: 0;
+    margin-bottom: 8px; /* Memberi sedikit jarak ke tag di bawahnya */
+    color: var(--text-color);
+    line-height: 1.4;
+}
+
+/* =================================================================== */
+/* 11. GAYA BARU UNTUK ANIMASI KARTU
+/* =================================================================== */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        /* Hapus 'transform: translateY(0);' dari sini */
+    }
+}
+
+
+/* =================================================================== */
+/* 13. GAYA BARU UNTUK FOOTER
+/* =================================================================== */
+
+.main-footer-container {
+    text-align: center;
+    padding: 24px;
+    margin-top: 32px; /* Memberi jarak dari konten di atasnya */
+    border-top: 1px solid var(--border-color); /* Garis pemisah tipis */
+    background-color: #fdfdfd; /* Warna yang sedikit berbeda agar menonjol */
+}
+
+.main-footer-container p {
+    margin: 0;
+    font-size: 0.9rem; /* Ukuran font sedikit lebih kecil */
+    color: var(--subtle-text); /* Menggunakan warna teks abu-abu sage */
 }

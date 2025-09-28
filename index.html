@@ -66,9 +66,6 @@
     </nav>
 
     <header class="main-header">
-        <div class="prompt-total-display">
-            Total prompt tersimpan : <span id="promptCount"></span>
-        </div>
         <div class="search-container">
             <input type="text" id="searchInput" placeholder="Cari judul, prompt, atau tag...">
         </div>
@@ -78,6 +75,9 @@
                 <button id="tagFilterBtn" class="filter-btn">Filter by Tag ▼</button>
                 <div id="tagDropdownContent" class="dropdown-content tag-list"></div>
             </div>
+        </div>
+		<div class="prompt-total-display">
+            Total prompt tersimpan : <span id="promptCount"></span>
         </div>
     </header>
 
@@ -92,8 +92,35 @@
         <img class="modal-content" id="modalImage">
     </div>
 
-    <button id="backToTopBtn" title="Kembali ke atas">↑</button>
+    <div id="promptModal" class="modal-prompt">
+		<div class="modal-prompt-content">
+			<span class="modal-prompt-close">&times;</span>
+			
+			<div class="modal-image-container">
+				<span id="modalOriginalLabel" class="original-label-modal">Original</span>
 
-    <script src="script.js"></script>
+				<img id="promptModalImage" src="" alt="Prompt Image">
+				<button id="modalPrevBtn" class="modal-nav-btn prev">‹</button>
+				<button id="modalNextBtn" class="modal-nav-btn next">›</button>
+			</div>
+			
+				<div class="modal-prompt-details">
+				<h3 id="promptModalTitle"></h3>
+
+				<div id="promptModalTags" class="tags"></div>
+				<textarea id="promptModalText" readonly></textarea>
+				<div class="modal-prompt-actions">
+					<button id="promptModalCopyBtn">Salin Prompt</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+    <button id="backToTopBtn" title="Kembali ke atas">↑</button>
+	<footer class="main-footer-container">
+			<p>© 2025 SalinPrompt | Dibuat dengan ❤️ oleh Imam Nurholilp>
+	</footer>
+    <script src="prompts.js"></script>   
+	<script src="script.js"></script>   
 </body>
 </html>
