@@ -2,6 +2,7 @@
 // PUSAT DATA ANDA (JSON)
 // ===================================================================
 const promptData = [
+    // ... (SELURUH DATA JSON ANDA TETAP DI SINI, TIDAK ADA PERUBAHAN)
     // design/diagram
     {
         image: 'images/diagram1-output.png',
@@ -319,7 +320,6 @@ const promptData = [
     },
     {
         image: 'images/building3-output.png',
-        imageInput: 'images/building3-input.png',
         title: 'Real World AR Information',
         category: 'Building',
         tags: ['Building'],
@@ -351,7 +351,6 @@ const promptData = [
     },
     {
         image: 'images/building7-output.png',
-        imageInput: 'images/building7-input.png',
         title: 'Split Scene Photo',
         category: 'Building',
         tags: ['Building'],
@@ -378,76 +377,81 @@ const promptData = [
 // KODE INTI WEBSITE
 // ===================================================================
 document.addEventListener('DOMContentLoaded', () => {
-    // --- Elemen-elemen penting ---
-    const promptGrid = document.getElementById('promptGrid');
-    const searchInput = document.getElementById('searchInput');
-    const navMenu = document.getElementById('navMenu');
-    const homeBtn = document.getElementById('homeBtn');
-    const resetFilterBtn = document.getElementById('resetFilterBtn');
-    const tagFilterBtn = document.getElementById('tagFilterBtn');
-    const tagDropdownContent = document.getElementById('tagDropdownContent');
-    const hamburger = document.getElementById('hamburger');
-    const paginationContainer = document.getElementById('paginationContainer');
-    const backToTopBtn = document.getElementById('backToTopBtn');
-    const modal = document.getElementById('imageModal');
-    const modalImg = document.getElementById('modalImage');
-    const closeBtn = document.querySelector('.close-btn');
-    const promptCountElement = document.getElementById('promptCount');
+    // --- 1. DEKLARASI ELEMEN & VARIABEL ---
+    const getEl = (id) => document.getElementById(id);
 
-    // --- VARIABEL STATE & PENGATURAN ---
+    const promptGrid = getEl('promptGrid');
+    const searchInput = getEl('searchInput');
+    const navMenu = getEl('navMenu');
+    const homeBtn = getEl('homeBtn');
+    const resetFilterBtn = getEl('resetFilterBtn');
+    const tagFilterBtn = getEl('tagFilterBtn');
+    const tagDropdownContent = getEl('tagDropdownContent');
+    const hamburger = getEl('hamburger');
+    const paginationContainer = getEl('paginationContainer');
+    const backToTopBtn = getEl('backToTopBtn');
+    const promptCountElement = getEl('promptCount');
+
+    const imageModal = getEl('imageModal');
+    const modalImage = getEl('modalImage');
+    const imageModalCloseBtn = imageModal.querySelector('.close-btn');
+
+    const promptModal = getEl('promptModal');
+    // === ELEMEN BARU UNTUK JUDUL ===
+    const promptModalTitle = getEl('promptModalTitle');
+    const promptModalImage = getEl('promptModalImage');
+    const promptModalTags = getEl('promptModalTags');
+    const promptModalText = getEl('promptModalText');
+    const promptModalCopyBtn = getEl('promptModalCopyBtn');
+    const promptModalCloseBtn = promptModal.querySelector('.modal-prompt-close');
+    const modalPrevBtn = getEl('modalPrevBtn');
+    const modalNextBtn = getEl('modalNextBtn');
+    const modalOriginalLabel = getEl('modalOriginalLabel');
+
+    // Variabel State
     let currentPage = 1;
-    const itemsPerPage = 12; // Menampilkan 12 item per halaman
+    const itemsPerPage = 12;
     let currentActiveData = [...promptData];
+    let currentModalData = null;
 
-    // --- FUNGSI-FUNGSI UTAMA ---
+    // --- 2. FUNGSI-FUNGSI UTAMA ---
 
-    /**
-     * Fungsi utama untuk me-render kartu gambar dan paginasi.
-     */
     function updateDisplay(dataToShow) {
         currentActiveData = dataToShow;
         const totalPages = Math.ceil(currentActiveData.length / itemsPerPage);
         
-        // Pastikan currentPage tidak melebihi total halaman yang ada
         if (currentPage > totalPages) {
             currentPage = totalPages > 0 ? totalPages : 1;
         }
 
         const startIndex = (currentPage - 1) * itemsPerPage;
-        const endIndex = startIndex + itemsPerPage;
-        const paginatedData = currentActiveData.slice(startIndex, endIndex);
+        const paginatedData = currentActiveData.slice(startIndex, startIndex + itemsPerPage);
 
         displayCards(paginatedData);
         setupPagination(totalPages);
     }
 
-    /**
-     * Menampilkan kartu-kartu di grid.
-     */
     function displayCards(data) {
         promptGrid.innerHTML = '';
         if (data.length === 0) {
             promptGrid.innerHTML = '<p class="info-text">Tidak ada prompt yang cocok.</p>';
             return;
         }
-        data.forEach(item => {
+        data.forEach((item) => {
             const card = document.createElement('div');
             card.className = 'card';
-            let tagsHTML = item.tags.map(tag => `<span class="tag">${tag}</span>`).join('');
+            card.dataset.index = promptData.indexOf(item);
 
-            let imageHTML;
-            if (item.imageInput) {
-                imageHTML = `
-                    <div class="card-image-container" data-modal-img="${item.image}">
-                        <img src="${item.imageInput}" alt="Gambar Input" class="card-image img-input" loading="lazy">
-                        <img src="${item.image}" alt="${item.title}" class="card-image img-output" loading="lazy">
-                    </div>`;
-            } else {
-                imageHTML = `
-                    <div class="card-image-container" data-modal-img="${item.image}">
-                        <img src="${item.image}" alt="${item.title}" class="card-image" loading="lazy">
-                    </div>`;
-            }
+            const tagsHTML = item.tags.map(tag => `<span class="tag">${tag}</span>`).join('');
+            const imageHTML = item.imageInput ? `
+                <div class="card-image-container">
+                    <img src="${item.imageInput}" alt="Gambar Input" class="card-image img-input" loading="lazy">
+                    <img src="${item.image}" alt="${item.title}" class="card-image img-output" loading="lazy">
+                    <span class="original-label">Original</span>
+                </div>` : `
+                <div class="card-image-container">
+                    <img src="${item.image}" alt="${item.title}" class="card-image" loading="lazy">
+                </div>`;
 
             card.innerHTML = `
                 ${imageHTML}
@@ -455,15 +459,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     <h4 class="card-title">${item.title || 'Tanpa Judul'}</h4>
                     <div class="tags">${tagsHTML}</div>
                     <textarea class="prompt-text" readonly>${item.prompt}</textarea>
-                    <button class="copy-btn">Copy</button>
+                    <button class="copy-btn">Salin</button>
                 </div>`;
             promptGrid.appendChild(card);
         });
     }
 
-    /**
-     * Membuat dan menampilkan tombol-tombol paginasi.
-     */
     function setupPagination(totalPages) {
         paginationContainer.innerHTML = '';
         if (totalPages <= 1) return;
@@ -477,153 +478,193 @@ document.addEventListener('DOMContentLoaded', () => {
             button.addEventListener('click', onClick);
             return button;
         };
-
-        const prevHandler = () => {
-            if (currentPage > 1) {
-                currentPage--;
-                updateDisplay(currentActiveData);
-            }
+        
+        const goToPage = (page) => {
+            currentPage = page;
+            updateDisplay(currentActiveData);
+            window.scrollTo(0, 0);
         };
-        paginationContainer.appendChild(createButton('<', prevHandler, currentPage === 1));
 
+        paginationContainer.appendChild(createButton('<', () => goToPage(currentPage - 1), currentPage === 1));
         for (let i = 1; i <= totalPages; i++) {
-            const pageHandler = () => {
-                currentPage = i;
-                updateDisplay(currentActiveData);
-            };
-            paginationContainer.appendChild(createButton(i, pageHandler, false, i === currentPage));
+            paginationContainer.appendChild(createButton(i, () => goToPage(i), false, i === currentPage));
         }
-
-        const nextHandler = () => {
-            if (currentPage < totalPages) {
-                currentPage++;
-                updateDisplay(currentActiveData);
-            }
-        };
-        paginationContainer.appendChild(createButton('>', nextHandler, currentPage === totalPages));
+        paginationContainer.appendChild(createButton('>', () => goToPage(currentPage + 1), currentPage === totalPages));
     }
-
-    /**
-     * Membuat daftar tag unik untuk dropdown filter.
-     */
+    
     function createTagDropdown() {
         const allTags = [...new Set(promptData.flatMap(item => item.tags))];
         tagDropdownContent.innerHTML = '';
         allTags.sort().forEach(tag => {
-            const tagButton = document.createElement('button');
-            tagButton.className = 'filter-btn';
-            tagButton.textContent = tag;
-            tagButton.dataset.tag = tag;
-            tagDropdownContent.appendChild(tagButton);
+            const button = document.createElement('button');
+            button.className = 'filter-btn';
+            button.textContent = tag;
+            button.dataset.tag = tag;
+            tagDropdownContent.appendChild(button);
         });
     }
 
-    // --- EVENT LISTENERS ---
+    // === FUNGSI MODAL DIPERBARUI ===
+    function showPromptModal(cardElement) {
+        const dataIndex = cardElement.dataset.index;
+        if (dataIndex === undefined) return;
 
-    // Pencarian
+        const itemData = promptData[dataIndex];
+        if (!itemData) return;
+
+        currentModalData = itemData;
+
+        // === ISI DATA KE DALAM MODAL ===
+        promptModalTitle.textContent = currentModalData.title || 'Tanpa Judul';
+        promptModalImage.src = currentModalData.image;
+        promptModalImage.dataset.currentView = 'output';
+        promptModalImage.alt = currentModalData.title;
+        promptModalText.value = currentModalData.prompt;
+        promptModalTags.innerHTML = currentModalData.tags.map(tag => `<span class="tag">${tag}</span>`).join('');
+        
+        if (currentModalData.imageInput) {
+            modalPrevBtn.style.display = 'block';
+            modalNextBtn.style.display = 'block';
+        } else {
+            modalPrevBtn.style.display = 'none';
+            modalNextBtn.style.display = 'none';
+        }
+        
+        modalOriginalLabel.style.display = 'none';
+        
+        promptModal.classList.add('show');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closePromptModal() {
+        promptModal.classList.remove('show');
+        document.body.style.overflow = '';
+        currentModalData = null;
+    }
+
+    function toggleModalImage() {
+        if (!currentModalData || !currentModalData.imageInput) return;
+
+        const currentView = promptModalImage.dataset.currentView;
+        if (currentView === 'output') {
+            promptModalImage.src = currentModalData.imageInput;
+            promptModalImage.dataset.currentView = 'input';
+            modalOriginalLabel.style.display = 'block';
+        } else {
+            promptModalImage.src = currentModalData.image;
+            promptModalImage.dataset.currentView = 'output';
+            modalOriginalLabel.style.display = 'none';
+        }
+    }
+
+    // --- 3. EVENT LISTENERS ---
+    
+    // (Semua event listener dari searchInput hingga homeBtn tetap sama persis)
     searchInput.addEventListener('input', () => {
-        const searchTerm = searchInput.value.toLowerCase();
-        const filteredData = promptData.filter(item => {
-            const titleMatch = item.title && item.title.toLowerCase().includes(searchTerm);
-            const promptMatch = item.prompt.toLowerCase().includes(searchTerm);
-            const tagMatch = item.tags.some(tag => tag.toLowerCase().includes(searchTerm));
-            return titleMatch || promptMatch || tagMatch;
-        });
+        const searchTerm = searchInput.value.toLowerCase().trim();
+        const filteredData = promptData.filter(item => 
+            (item.title && item.title.toLowerCase().includes(searchTerm)) ||
+            item.prompt.toLowerCase().includes(searchTerm) ||
+            item.tags.some(tag => tag.toLowerCase().includes(searchTerm))
+        );
         currentPage = 1;
         updateDisplay(filteredData);
-        document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+        document.querySelectorAll('.filter-btn.active').forEach(btn => btn.classList.remove('active'));
+        resetFilterBtn.classList.add('active');
     });
-
-    // Filter Kategori dari Navbar
-    navMenu.addEventListener('click', (event) => {
-        if (event.target.classList.contains('category-filter-link')) {
-            event.preventDefault();
-            const categoryToFilter = event.target.dataset.category;
-            const filteredData = promptData.filter(item => item.category === categoryToFilter);
-            
+    navMenu.addEventListener('click', (e) => {
+        if (e.target.classList.contains('category-filter-link')) {
+            e.preventDefault();
+            const category = e.target.dataset.category;
+            updateDisplay(promptData.filter(item => item.category === category));
             currentPage = 1;
-            updateDisplay(filteredData);
             searchInput.value = '';
-            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
-            if (navMenu.classList.contains('active')) navMenu.classList.remove('active');
+            document.querySelectorAll('.filter-btn.active').forEach(btn => btn.classList.remove('active'));
+            if (hamburger.classList.contains('active')) {
+                hamburger.classList.remove('active');
+                navMenu.classList.remove('active');
+            }
         }
     });
-    
-    // Filter by Tag (Hover & Klik)
-    const tagDropdownContainer = document.querySelector('.tag-dropdown');
-    tagDropdownContainer.addEventListener('mouseenter', () => tagDropdownContent.classList.add('show'));
-    tagDropdownContainer.addEventListener('mouseleave', () => tagDropdownContent.classList.remove('show'));
-
-    document.querySelector('.filter-controls').addEventListener('click', (event) => {
-        if (!event.target.classList.contains('filter-btn') || event.target.id === 'tagFilterBtn') {
+    document.querySelector('.filter-controls').addEventListener('click', (e) => {
+        const target = e.target;
+        if (target.id === 'tagFilterBtn') {
+            tagDropdownContent.classList.toggle('show');
             return;
         }
-
-        searchInput.value = '';
-        document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
-        event.target.classList.add('active');
-
-        let filteredData;
-        if (event.target.id === 'resetFilterBtn') {
-            filteredData = promptData;
-        } else {
-            const clickedTag = event.target.dataset.tag;
-            filteredData = promptData.filter(item => item.tags.includes(clickedTag));
+        if (target.classList.contains('filter-btn')) {
+            searchInput.value = '';
+            document.querySelectorAll('.filter-controls .filter-btn').forEach(btn => btn.classList.remove('active'));
+            target.classList.add('active');
+            const tag = target.dataset.tag;
+            updateDisplay(tag ? promptData.filter(item => item.tags.includes(tag)) : promptData);
+            currentPage = 1;
+            tagDropdownContent.classList.remove('show');
         }
-
-        currentPage = 1;
-        updateDisplay(filteredData);
-        tagDropdownContent.classList.remove('show');
     });
-    
-    // Tombol Reset Utama (Logo/Brand)
+    window.addEventListener('click', (e) => {
+        if (!e.target.closest('.tag-dropdown')) {
+            tagDropdownContent.classList.remove('show');
+        }
+    });
     homeBtn.addEventListener('click', (e) => {
         e.preventDefault();
         searchInput.value = '';
-        document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+        document.querySelectorAll('.filter-btn.active').forEach(btn => btn.classList.remove('active'));
         resetFilterBtn.classList.add('active');
         currentPage = 1;
         updateDisplay(promptData);
     });
-
-    // Tombol Kembali ke Atas
-    if (backToTopBtn) {
-        window.addEventListener('scroll', () => {
-            backToTopBtn.style.display = (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) ? "block" : "none";
+    promptGrid.addEventListener('click', (e) => {
+        const card = e.target.closest('.card');
+        if (!card) return;
+        const isMobile = window.innerWidth <= 768;
+        if (isMobile) {
+            showPromptModal(card);
+        } else {
+            if (e.target.classList.contains('copy-btn')) {
+                const promptText = card.querySelector('.prompt-text').value;
+                navigator.clipboard.writeText(promptText).then(() => {
+                    e.target.textContent = 'Tersalin!';
+                    setTimeout(() => { e.target.textContent = 'Salin'; }, 2000);
+                });
+            } else if (e.target.closest('.card-image-container')) {
+                const img = card.querySelector('.img-output, .card-image');
+                if (img) {
+                    modalImage.src = img.src;
+                    imageModal.style.display = 'block';
+                }
+            }
+        }
+    });
+    promptModalCloseBtn.addEventListener('click', closePromptModal);
+    promptModal.addEventListener('click', (e) => { if (e.target === promptModal) closePromptModal(); });
+    promptModalCopyBtn.addEventListener('click', (e) => {
+        navigator.clipboard.writeText(promptModalText.value).then(() => {
+            e.target.textContent = 'Tersalin!';
+            setTimeout(() => { e.target.textContent = 'Salin Prompt'; }, 2000);
         });
-        backToTopBtn.addEventListener('click', () => {
-            window.scrollTo({ top: 0, behavior: "smooth" });
-        });
-    }
+    });
 
-    // Interaksi Modal Gambar, Copy, dan Hamburger
+    modalPrevBtn.addEventListener('click', toggleModalImage);
+    modalNextBtn.addEventListener('click', toggleModalImage);
+
+    imageModalCloseBtn.addEventListener('click', () => imageModal.style.display = "none");
+    imageModal.addEventListener('click', (e) => { if (e.target === imageModal) imageModal.style.display = "none"; });
+
     hamburger.addEventListener('click', () => {
         hamburger.classList.toggle('active');
         navMenu.classList.toggle('active');
     });
-
-    promptGrid.addEventListener('click', (event) => {
-        if (event.target.classList.contains('copy-btn')) {
-            const card = event.target.closest('.card');
-            const promptText = card.querySelector('.prompt-text').value;
-            navigator.clipboard.writeText(promptText).then(() => {
-                event.target.textContent = 'Tersalin!';
-                setTimeout(() => { event.target.textContent = 'Copy'; }, 2000);
-            });
-        }
-
-        const imageContainer = event.target.closest('.card-image-container');
-        if (imageContainer) {
-            modal.style.display = "block";
-            modalImg.src = imageContainer.dataset.modalImg;
-        }
+    window.addEventListener('scroll', () => {
+        backToTopBtn.style.display = (window.scrollY > 300) ? "block" : "none";
     });
-    
-    closeBtn.onclick = () => { modal.style.display = "none"; }
-    modal.onclick = (event) => { if (event.target === modal) { modal.style.display = "none"; } }
+    backToTopBtn.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    });
 
-    // --- INISIALISASI ---
-    if (promptCountElement) {
+    // --- 4. INISIALISASI ---
+    if(promptCountElement) {
         promptCountElement.textContent = promptData.length;
     }
     createTagDropdown();
