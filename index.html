@@ -7,89 +7,92 @@
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
     <nav class="navbar">
-    
-    <ul class="nav-menu" id="navMenu">
+        <div class="nav-brand">
+            <a href="#" id="homeBtn">SalinPrompt</a>
+        </div>
 
-	<li id="homeBtn" class="nav-item"><a href="#"  >Home</a></li>
-        <li class="nav-item dropdown">
-            <a href="#">Design ▼</a>
-            <ul class="dropdown-content">
-                <li><a href="#" class="category-filter-link" data-category="Design">Design</a></li>
-                <li><a href="#" class="category-filter-link" data-category="Diagram">Diagram</a></li>
-                <li><a href="#" class="category-filter-link" data-category="Infographic">Infographic</a></li>
-                <li><a href="#" class="category-filter-link" data-category="Mockup">Mockup</a></li>
-                <li><a href="#" class="category-filter-link" data-category="Product">Product</a></li>
-                <li><a href="#" class="category-filter-link" data-category="Typography">Typography</a></li>
-            </ul>
-        </li>
-        <li class="nav-item dropdown">
-            <a href="#">ETC ▼</a>
-            <ul class="dropdown-content">
-                <li><a href="#" class="category-filter-link" data-category="ETC">ETC</a></li>
-            </ul>
-        </li>
-        <li class="nav-item dropdown">
-            <a href="#">Illustration ▼</a>
-            <ul class="dropdown-content">
-                <li><a href="#" class="category-filter-link" data-category="3D">3D</a></li>
-                <li><a href="#" class="category-filter-link" data-category="Anime">Anime</a></li>
-                <li><a href="#" class="category-filter-link" data-category="Building">Building</a></li>
-                <li><a href="#" class="category-filter-link" data-category="Character Design">Character Design</a></li>
-                <li><a href="#" class="category-filter-link" data-category="Comic">Comic</a></li>
-                <li><a href="#" class="category-filter-link" data-category="Cute">Cute</a></li>
-                <li><a href="#" class="category-filter-link" data-category="Illustration">Illustration</a></li>
-                <li><a href="#" class="category-filter-link" data-category="Industry">Industry</a></li>
-                <li><a href="#" class="category-filter-link" data-category="Sticker">Sticker</a></li>
-                <li><a href="#" class="category-filter-link" data-category="Street">Street</a></li>
-            </ul>
-        </li>
-        <li class="nav-item"><a href="#" class="category-filter-link" data-category="Photos">Photos</a></li>
-        <li class="nav-item"><a href="#" class="category-filter-link" data-category="Nano Banana">Nano Banana</a></li>
-    </ul>
-	
-    <button class="hamburger" id="hamburger">
-        <span></span>
-        <span></span>
-        <span></span>
-    </button>
-	
-	<button id="backToTopBtn" title="Kembali ke atas">↑</button>
+        <ul class="nav-menu" id="navMenu">
+            <li class="nav-item dropdown">
+                <a href="#">Design ▼</a>
+                <ul class="dropdown-content">
+                    <li><a href="#" class="category-filter-link" data-category="Diagram">Diagram</a></li>
+                    <li><a href="#" class="category-filter-link" data-category="Infographic">Infographic</a></li>
+                    <li><a href="#" class="category-filter-link" data-category="Mockup">Mockup</a></li>
+                    <li><a href="#" class="category-filter-link" data-category="Product">Product</a></li>
+                    <li><a href="#" class="category-filter-link" data-category="Typography">Typography</a></li>
+                </ul>
+            </li>
+            <li class="nav-item dropdown">
+                <a href="#">ETC ▼</a>
+                <ul class="dropdown-content">
+                    <li><a href="#" class="category-filter-link" data-category="ETC">ETC</a></li>
+                </ul>
+            </li>
+            <li class="nav-item dropdown">
+                <a href="#">Illustration ▼</a>
+                <ul class="dropdown-content">
+                    <li><a href="#" class="category-filter-link" data-category="3D">3D</a></li>
+                    <li><a href="#" class="category-filter-link" data-category="Anime">Anime</a></li>
+                    <li><a href="#" class="category-filter-link" data-category="Building">Building</a></li>
+                    <li><a href="#" class="category-filter-link" data-category="Character Design">Character Design</a></li>
+                    <li><a href="#" class="category-filter-link" data-category="Comic">Comic</a></li>
+                    <li><a href="#" class="category-filter-link" data-category="Cute">Cute</a></li>
+                    <li><a href="#" class="category-filter-link" data-category="Industry">Industry</a></li>
+                    <li><a href="#" class="category-filter-link" data-category="Sticker">Sticker</a></li>
+                    <li><a href="#" class="category-filter-link" data-category="Street">Street</a></li>
+                </ul>
+            </li>
+            <li class="nav-item dropdown">
+                <a href="#">Photos ▼</a>
+                <ul class="dropdown-content">
+                    <li><a href="#" class="category-filter-link" data-category="Auto Edit">Auto Edit</a></li>
+                    <li><a href="#" class="category-filter-link" data-category="Fashion">Fashion</a></li>
+                    <li><a href="#" class="category-filter-link" data-category="Food">Food</a></li>
+                    <li><a href="#" class="category-filter-link" data-category="Hair">Hair</a></li>
+                </ul>
+            </li>
+        </ul>
 
-	<div class="nav-brand">
-        <a href="https://dobreng.github.io/" id="homeBtn">SalinPrompt</a>
-    </div>
-</nav>
+        <button class="hamburger" id="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </nav>
 
     <header class="main-header">
-    <div class="filter-controls">
-        <button id="resetFilterBtn" class="filter-btn active">Tampilkan Semua</button>
-        <div class="tag-dropdown">
-            <button id="tagFilterBtn" class="filter-btn">Filter by Tag ▼</button>
-            <div id="tagDropdownContent" class="dropdown-content tag-list"></div>
+        <div class="prompt-total-display">
+            Total prompt tersimpan : <span id="promptCount"></span>
         </div>
-    </div>
-
-    <!-- 🔍 Search Bar Baru -->
-    <div class="search-container">
-        <input type="text" id="searchInput" placeholder="Cari prompt atau tag...">
-    </div>
-</header>
-
+        <div class="search-container">
+            <input type="text" id="searchInput" placeholder="Cari judul, prompt, atau tag...">
+        </div>
+        <div class="filter-controls">
+            <button id="resetFilterBtn" class="filter-btn active">Tampilkan Semua</button>
+            <div class="tag-dropdown">
+                <button id="tagFilterBtn" class="filter-btn">Filter by Tag ▼</button>
+                <div id="tagDropdownContent" class="dropdown-content tag-list"></div>
+            </div>
+        </div>
+    </header>
 
     <main>
         <div class="prompt-grid" id="promptGrid"></div>
-		<div class="pagination" id="pagination"></div>
     </main>
+
+    <div class="pagination-container" id="paginationContainer"></div>
 
     <div id="imageModal" class="modal">
         <span class="close-btn">&times;</span>
         <img class="modal-content" id="modalImage">
     </div>
+
+    <button id="backToTopBtn" title="Kembali ke atas">↑</button>
 
     <script src="script.js"></script>
 </body>
