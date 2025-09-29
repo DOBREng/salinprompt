@@ -318,6 +318,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const { data, error } = await supabaseClient
                 .from('prompts')
                 .select('*')
+				.order('created_at', { ascending: false });
 
             if (error) {
                 throw error;
