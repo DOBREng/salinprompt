@@ -1,0 +1,17 @@
+{
+  "name": "salinprompt-test",
+  "version": "1.0.0",
+  "description": "",
+  "main": "admin.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.58.0",
+    "cloudinary": "^2.7.0",
+    "multiparty": "^4.2.3"
+  }
+}

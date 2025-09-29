@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Upload - SalinPrompt</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            padding: 20px;
+        }
+        .admin-container {
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 30px;
+            background: #fff;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        .admin-container h1 {
+            text-align: center;
+            margin-top: 0;
+            color: var(--text-color);
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+            box-sizing: border-box;
+        }
+        .form-group small {
+            color: var(--subtle-text);
+            font-size: 0.8rem;
+        }
+        .submit-btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: var(--accent-gradient);
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+        .submit-btn:hover {
+            transform: scale(1.02);
+        }
+        #statusMessage {
+            text-align: center;
+            margin-top: 20px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="admin-container">
+        <h1>Upload Prompt Baru</h1>
+        <form id="uploadForm">
+            <div class="form-group">
+                <label for="title">Judul</label>
+                <input type="text" id="title" name="title" required>
+            </div>
+
+            <div class="form-group">
+                <label for="prompt">Prompt</label>
+                <textarea id="prompt" name="prompt" rows="6" required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="category">Kategori</label>
+                <input type="text" id="category" name="category" required>
+            </div>
+
+            <div class="form-group">
+                <label for="tags">Tags</label>
+                <input type="text" id="tags" name="tags" required>
+                <small>Pisahkan beberapa tag dengan koma (contoh: 3D, Anime, Cute)</small>
+            </div>
+
+            <div class="form-group">
+                <label for="imageOutput">Gambar Hasil (Output)</label>
+                <input type="file" id="imageOutput" name="imageOutput" accept="image/*" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="imageInput">Gambar Asli (Input) - Opsional</label>
+                <input type="file" id="imageInput" name="imageInput" accept="image/*">
+            </div>
+
+            <button type="submit" class="submit-btn">Upload</button>
+        </form>
+        <div id="statusMessage"></div>
+    </div>
+		<script src="admin.js"></script>
+    </body>
+</html>

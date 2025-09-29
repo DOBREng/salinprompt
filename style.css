@@ -115,8 +115,6 @@ body {
     background-color: #f0f3f1;
 }
 
-/* GANTI BLOK LAMA DENGAN YANG BARU INI */
-
 /* Aturan :hover ini hanya akan aktif di layar lebar (desktop) */
 @media (min-width: 993px) {
     .dropdown:hover .dropdown-content {
@@ -565,8 +563,6 @@ main {
         line-height: 1.3;
     }
 
-    /* PERUBAHAN UTAMANYA DI SINI */
-    /* Kita hanya menyembunyikan elemen di dalam kartu, bukan di dalam popup */
     .card .tags, .card .prompt-text, .card .copy-btn {
         display: none;
     }
