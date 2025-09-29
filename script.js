@@ -1,38 +1,4 @@
 // ===================================================================
-// PUSAT DATA ANDA (JSON)
-// ===================================================================
-const card = e.target.closest('.card');
-    if (!card) return;
-
-    const isMobile = window.innerWidth <= 768;
-
-    if (isMobile) {
-        // Logika untuk mobile sudah benar, tidak ada perubahan
-        showPromptModal(card);
-    } else {
-        // --- Logika untuk Desktop ---
-        if (e.target.classList.contains('copy-btn')) {
-            const promptText = card.querySelector('.prompt-text').value;
-            navigator.clipboard.writeText(promptText).then(() => {
-                e.target.textContent = 'Tersalin!';
-                setTimeout(() => { e.target.textContent = 'Salin'; }, 2000);
-            });
-        } else if (e.target.closest('.card-image-container')) {
-            // ==========================================================
-            // INI BAGIAN YANG DIPERBAIKI
-            // Kode ini sekarang secara spesifik mencari gambar output (.img-output) terlebih dahulu.
-            // Jika tidak ada, baru ia mencari gambar standar (.card-image).
-            // ==========================================================
-            const img = card.querySelector('.img-output') || card.querySelector('.card-image');
-            
-            if (img) {
-                modalImage.src = img.src;
-                imageModal.style.display = 'block';
-            }
-        }
-    }
-});
-// ===================================================================
 // KODE INTI WEBSITE
 // ===================================================================
 document.addEventListener('DOMContentLoaded', () => {
@@ -43,28 +9,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const searchInput = getEl('searchInput');
     const navMenu = getEl('navMenu');
     const homeBtn = getEl('homeBtn');
-	document.querySelectorAll('.nav-menu .dropdown > a').forEach(menuItem => {
-    menuItem.addEventListener('click', function(e) {
-        // Hanya jalankan di tampilan mobile (saat hamburger aktif)
-        if (window.innerWidth <= 992) {
-            e.preventDefault(); // Mencegah link pindah halaman
-
-            const parentDropdown = this.parentElement;
-            const targetDropdown = this.nextElementSibling;
-            const isAlreadyOpen = targetDropdown.classList.contains('show');
-
-            // 1. Tutup semua dropdown lain yang mungkin sedang terbuka
-            document.querySelectorAll('.dropdown-content').forEach(dd => {
-                if (dd !== targetDropdown) {
-                    dd.classList.remove('show');
-                }
-            });
-
-            // 2. Buka atau tutup dropdown yang di-klik
-            targetDropdown.classList.toggle('show');
-        }
-    });
-});
     const resetFilterBtn = getEl('resetFilterBtn');
     const tagFilterBtn = getEl('tagFilterBtn');
     const tagDropdownContent = getEl('tagDropdownContent');
@@ -78,7 +22,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const imageModalCloseBtn = imageModal.querySelector('.close-btn');
 
     const promptModal = getEl('promptModal');
-    // === ELEMEN BARU UNTUK JUDUL ===
     const promptModalTitle = getEl('promptModalTitle');
     const promptModalImage = getEl('promptModalImage');
     const promptModalTags = getEl('promptModalTags');
@@ -113,45 +56,41 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function displayCards(data) {
-    promptGrid.innerHTML = '';
-    if (data.length === 0) {
-        promptGrid.innerHTML = '<p class="info-text">Tidak ada prompt yang cocok.</p>';
-        return;
+        promptGrid.innerHTML = '';
+        if (data.length === 0) {
+            promptGrid.innerHTML = '<p class="info-text">Tidak ada prompt yang cocok.</p>';
+            return;
+        }
+        data.forEach((item, index) => {
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.dataset.index = promptData.indexOf(item);
+            
+            const delay = index * 50;
+            card.style.animationDelay = `${delay}ms`;
+
+            const tagsHTML = item.tags.map(tag => `<span class="tag">${tag}</span>`).join('');
+            const imageHTML = item.imageInput ? `
+                <div class="card-image-container">
+                    <img src="${item.imageInput}" alt="Gambar Input" class="card-image img-input" loading="lazy">
+                    <img src="${item.image}" alt="${item.title}" class="card-image img-output" loading="lazy">
+                    <span class="original-label">Original</span>
+                </div>` : `
+                <div class="card-image-container">
+                    <img src="${item.image}" alt="${item.title}" class="card-image" loading="lazy">
+                </div>`;
+
+            card.innerHTML = `
+                ${imageHTML}
+                <div class="card-content">
+                    <h4 class="card-title">${item.title || 'Tanpa Judul'}</h4>
+                    <div class="tags">${tagsHTML}</div>
+                    <textarea class="prompt-text" readonly>${item.prompt}</textarea>
+                    <button class="copy-btn">Salin</button>
+                </div>`;
+            promptGrid.appendChild(card);
+        });
     }
-    data.forEach((item, index) => { // Kita butuh 'index' di sini
-        const card = document.createElement('div');
-        card.className = 'card';
-        card.dataset.index = promptData.indexOf(item);
-
-        // ==========================================================
-        // PENAMBAHAN UNTUK EFEK ANIMASI BERURUTAN (STAGGER)
-        // ==========================================================
-        const delay = index * 50; // Memberi jeda 50ms untuk setiap kartu
-        card.style.animationDelay = `${delay}ms`;
-        // ==========================================================
-
-        const tagsHTML = item.tags.map(tag => `<span class="tag">${tag}</span>`).join('');
-        const imageHTML = item.imageInput ? `
-            <div class="card-image-container">
-                <img src="${item.imageInput}" alt="Gambar Input" class="card-image img-input" loading="lazy">
-                <img src="${item.image}" alt="${item.title}" class="card-image img-output" loading="lazy">
-                <span class="original-label">Original</span>
-            </div>` : `
-            <div class="card-image-container">
-                <img src="${item.image}" alt="${item.title}" class="card-image" loading="lazy">
-            </div>`;
-
-        card.innerHTML = `
-            ${imageHTML}
-            <div class="card-content">
-                <h4 class="card-title">${item.title || 'Tanpa Judul'}</h4>
-                <div class="tags">${tagsHTML}</div>
-                <textarea class="prompt-text" readonly>${item.prompt}</textarea>
-                <button class="copy-btn">Salin</button>
-            </div>`;
-        promptGrid.appendChild(card);
-    });
-}
 
     function setupPagination(totalPages) {
         paginationContainer.innerHTML = '';
@@ -192,7 +131,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // === FUNGSI MODAL DIPERBARUI ===
     function showPromptModal(cardElement) {
         const dataIndex = cardElement.dataset.index;
         if (dataIndex === undefined) return;
@@ -202,9 +140,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         currentModalData = itemData;
 
-        // === ISI DATA KE DALAM MODAL ===
         promptModalTitle.textContent = currentModalData.title || 'Tanpa Judul';
-        promptModalImage.src = currentModalData.image;
+        promptModalImage.src = currentModalData.image; 
         promptModalImage.dataset.currentView = 'output';
         promptModalImage.alt = currentModalData.title;
         promptModalText.value = currentModalData.prompt;
@@ -247,7 +184,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- 3. EVENT LISTENERS ---
     
-    // (Semua event listener dari searchInput hingga homeBtn tetap sama persis)
+    // Logika untuk Dropdown Menu di Mobile
+    document.querySelectorAll('.nav-menu .dropdown > a').forEach(menuItem => {
+        menuItem.addEventListener('click', function(e) {
+            if (window.innerWidth <= 992) {
+                e.preventDefault();
+                const targetDropdown = this.nextElementSibling;
+                // Tutup dropdown lain SEBELUM membuka yang baru
+                navMenu.querySelectorAll('.dropdown-content.show').forEach(dd => {
+                    if (dd !== targetDropdown) {
+                        dd.classList.remove('show');
+                    }
+                });
+                targetDropdown.classList.toggle('show');
+            }
+        });
+    });
+    
     searchInput.addEventListener('input', () => {
         const searchTerm = searchInput.value.toLowerCase().trim();
         const filteredData = promptData.filter(item => 
@@ -260,6 +213,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelectorAll('.filter-btn.active').forEach(btn => btn.classList.remove('active'));
         resetFilterBtn.classList.add('active');
     });
+
     navMenu.addEventListener('click', (e) => {
         if (e.target.classList.contains('category-filter-link')) {
             e.preventDefault();
@@ -271,9 +225,12 @@ document.addEventListener('DOMContentLoaded', () => {
             if (hamburger.classList.contains('active')) {
                 hamburger.classList.remove('active');
                 navMenu.classList.remove('active');
+                // Tutup semua dropdown di menu mobile
+                navMenu.querySelectorAll('.dropdown-content.show').forEach(dd => dd.classList.remove('show'));
             }
         }
     });
+
     document.querySelector('.filter-controls').addEventListener('click', (e) => {
         const target = e.target;
         if (target.id === 'tagFilterBtn') {
@@ -282,19 +239,29 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         if (target.classList.contains('filter-btn')) {
             searchInput.value = '';
-            document.querySelectorAll('.filter-controls .filter-btn').forEach(btn => btn.classList.remove('active'));
+            // Termasuk tombol di dalam dropdown tag
+            document.querySelectorAll('.filter-controls .filter-btn, .tag-list .filter-btn').forEach(btn => btn.classList.remove('active'));
             target.classList.add('active');
-            const tag = target.dataset.tag;
-            updateDisplay(tag ? promptData.filter(item => item.tags.includes(tag)) : promptData);
+            
+            // Jika yang diklik adalah tombol "Tampilkan Semua" (reset)
+            if (target.id === 'resetFilterBtn') {
+                updateDisplay(promptData);
+            } else { // Jika yang diklik adalah tag
+                const tag = target.dataset.tag;
+                updateDisplay(promptData.filter(item => item.tags.includes(tag)));
+            }
+            
             currentPage = 1;
             tagDropdownContent.classList.remove('show');
         }
     });
+
     window.addEventListener('click', (e) => {
         if (!e.target.closest('.tag-dropdown')) {
             tagDropdownContent.classList.remove('show');
         }
     });
+
     homeBtn.addEventListener('click', (e) => {
         e.preventDefault();
         searchInput.value = '';
@@ -303,43 +270,38 @@ document.addEventListener('DOMContentLoaded', () => {
         currentPage = 1;
         updateDisplay(promptData);
     });
-    const card = e.target.closest('.card');
-    if (!card) return;
 
-    const isMobile = window.innerWidth <= 768;
+    promptGrid.addEventListener('click', (e) => {
+        const card = e.target.closest('.card');
+        if (!card) return;
 
-    if (isMobile) {
-        // Logika untuk mobile sudah benar, tidak ada perubahan
-        showPromptModal(card);
-    } else {
-        // --- Logika untuk Desktop ---
-        if (e.target.classList.contains('copy-btn')) {
-            const promptText = card.querySelector('.prompt-text').value;
-            navigator.clipboard.writeText(promptText).then(() => {
-                e.target.textContent = 'Tersalin!';
-                setTimeout(() => { e.target.textContent = 'Salin'; }, 2000);
-            });
-        } else if (e.target.closest('.card-image-container')) {
-            // ==========================================================
-            // INI BAGIAN YANG DIPERBAIKI
-            // Kode ini sekarang secara spesifik mencari gambar output (.img-output) terlebih dahulu.
-            // Jika tidak ada, baru ia mencari gambar standar (.card-image).
-            // ==========================================================
-            const img = card.querySelector('.img-output') || card.querySelector('.card-image');
-            
-            if (img) {
-                modalImage.src = img.src;
-                imageModal.style.display = 'block';
+        const isMobile = window.innerWidth <= 768;
+
+        if (isMobile) {
+            showPromptModal(card);
+        } else {
+            if (e.target.classList.contains('copy-btn')) {
+                const promptText = card.querySelector('.prompt-text').value;
+                navigator.clipboard.writeText(promptText).then(() => {
+                    e.target.textContent = 'Tersalin!';
+                    setTimeout(() => { e.target.textContent = 'Salin'; }, 2000);
+                });
+            } else if (e.target.closest('.card-image-container')) {
+                const img = card.querySelector('.img-output') || card.querySelector('.card-image');
+                if (img) {
+                    modalImage.src = img.src;
+                    imageModal.style.display = 'flex'; // Menggunakan flex untuk centering
+                }
             }
         }
-    }
-});
+    });
+    
     promptModalCloseBtn.addEventListener('click', closePromptModal);
     promptModal.addEventListener('click', (e) => { if (e.target === promptModal) closePromptModal(); });
     promptModalCopyBtn.addEventListener('click', (e) => {
         navigator.clipboard.writeText(promptModalText.value).then(() => {
             e.target.textContent = 'Tersalin!';
-            setTimeout(() => { e.target.textContent = 'Salin Prompt'; }, 2000);
+            setTimeout(() => { e.target.textContent = 'Salin'; }, 2000);
         });
     });
 
@@ -353,9 +315,11 @@ document.addEventListener('DOMContentLoaded', () => {
         hamburger.classList.toggle('active');
         navMenu.classList.toggle('active');
     });
+
     window.addEventListener('scroll', () => {
         backToTopBtn.style.display = (window.scrollY > 300) ? "block" : "none";
     });
+    
     backToTopBtn.addEventListener('click', () => {
         window.scrollTo({ top: 0, behavior: "smooth" });
     });
