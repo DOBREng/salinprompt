@@ -844,3 +844,14 @@ main {
     font-size: 0.9rem; /* Ukuran font sedikit lebih kecil */
     color: var(--subtle-text); /* Menggunakan warna teks abu-abu sage */
 }
+
+/* Tambahkan ini di bagian CSS paginasi */
+.page-btn.ellipsis {
+    cursor: default;
+    background-color: transparent;
+    border-color: transparent;
+}
+
+.page-btn.ellipsis:hover {
+    color: var(--subtle-text); /* Pastikan warna tidak berubah saat di-hover */
+}
