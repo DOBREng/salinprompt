@@ -320,10 +320,11 @@ document.addEventListener('DOMContentLoaded', () => {
         promptGrid.innerHTML = '<p class="info-text">Memuat prompt...</p>';
         
         try {
-            const { data, error } = await supabaseClient
-				.from('prompts')
-				.select('*')
-				.order('created_at', { ascending: false }); // <--- TAMBAHKAN BARIS INI
+            const { data, error, count } = await supabaseClient
+    .from('prompts')
+    .select('*', { count: 'exact' }) // 'count' untuk tahu total data
+    .order('created_at', { ascending: false })
+    .range((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage - 1); // Hanya ambil data sesuai halaman
 
             if (error) {
                 throw error;
