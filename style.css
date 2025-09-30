@@ -855,3 +855,9 @@ main {
 .page-btn.ellipsis:hover {
     color: var(--subtle-text); /* Pastikan warna tidak berubah saat di-hover */
 }
+
+/* Add this to your admin.css file */
+
+.form-group {
+    position: relative; /* This is the key */
+}
