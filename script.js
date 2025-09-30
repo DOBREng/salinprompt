@@ -204,15 +204,20 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- 4. EVENT LISTENERS ---
     
     searchInput.addEventListener('input', () => {
-        const searchTerm = searchInput.value.toLowerCase().trim();
-        const filteredData = allPrompts.filter(item => 
-            (item.title && item.title.toLowerCase().includes(searchTerm)) ||
-            (item.prompt && item.prompt.toLowerCase().includes(searchTerm)) ||
-            (item.tags && item.tags.some(tag => tag.toLowerCase().includes(searchTerm)))
-        );
-        currentPage = 1;
-        updateDisplay(filteredData);
+    const searchTerm = searchInput.value.toLowerCase().trim();
+    const filteredData = allPrompts.filter(item => {
+        // PERBAIKAN: Pastikan 'tags' adalah array sebelum melakukan pencarian
+        const tagsArray = typeof item.tags === 'string' ? JSON.parse(item.tags) : (item.tags || []);
+
+        const titleMatch = item.title && item.title.toLowerCase().includes(searchTerm);
+        const promptMatch = item.prompt && item.prompt.toLowerCase().includes(searchTerm);
+        const tagMatch = tagsArray.some(tag => tag.toLowerCase().includes(searchTerm)); // <- GUNAKAN ARRAY YANG SUDAH DIPROSES
+
+        return titleMatch || promptMatch || tagMatch;
     });
+    currentPage = 1;
+    updateDisplay(filteredData);
+});
     navMenu.addEventListener('click', (e) => {
         if (e.target.classList.contains('category-filter-link')) {
             e.preventDefault();
