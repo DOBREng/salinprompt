@@ -374,7 +374,7 @@ main {
 .modal {
     display: none;
     position: fixed;
-    z-index: 2000;
+    z-index: 5000;
     padding-top: 60px;
     left: 0;
     top: 0;
