@@ -316,9 +316,9 @@ document.addEventListener('DOMContentLoaded', () => {
         
         try {
             const { data, error } = await supabaseClient
-                .from('prompts')
-                .select('*')
-
+				.from('prompts')
+				.select('*')
+				.order('created_at', { ascending: false }); // <--- TAMBAHKAN BARIS INI
 
             if (error) {
                 throw error;
