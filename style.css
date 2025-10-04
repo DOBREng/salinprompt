@@ -296,6 +296,13 @@ main {
     border-radius: 16px;
     font-size: 12px;
     font-weight: 500;
+	cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.tag:hover {
+    background-color: var(--accent-color);
+    color: white;
 }
 
 .prompt-text {
@@ -861,3 +868,4 @@ main {
 .form-group {
     position: relative; /* This is the key */
 }
+

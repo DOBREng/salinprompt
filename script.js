@@ -148,6 +148,8 @@ document.addEventListener('DOMContentLoaded', () => {
         modalOriginalLabel.style.display = 'none';
         promptModal.classList.add('show');
         document.body.style.overflow = 'hidden';
+
+
     }
 
     // Fungsi untuk paginasi "cerdas"
@@ -221,6 +223,25 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- 4. EVENT LISTENERS ---
+
+promptModalTags.addEventListener('click', (e) => {
+    // Pastikan yang diklik adalah elemen dengan kelas 'tag'
+    if (e.target.classList.contains('tag')) {
+        const tagName = e.target.textContent.trim();
+
+        // 1. Atur filter saat ini ke tag yang diklik
+        currentFilter = { type: 'tag', value: tagName };
+
+        // 2. Ambil dan tampilkan data baru berdasarkan filter
+        fetchAndDisplayPrompts(1);
+
+        // 3. Tutup modal setelah tag diklik
+        closePromptModal();
+
+        // 4. (Opsional) Scroll ke atas untuk melihat hasil filter
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+});
 
     // Helper function untuk 'debounce' agar pencarian tidak berjalan terus-menerus
     function debounce(func, delay) {
@@ -305,6 +326,28 @@ document.addEventListener('DOMContentLoaded', () => {
                 imageModal.style.display = 'flex';
             }
         }
+// Blok untuk klik TAG DI DALAM KARTU
+    else if (e.target.classList.contains('tag')) {
+        const tagName = e.target.textContent.trim();
+        currentFilter = { type: 'tag', value: tagName };
+        fetchAndDisplayPrompts(1);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Blok untuk membuka modal di mobile
+    else if (window.innerWidth <= 768) {
+        showPromptModal(card);
+    } 
+    
+    // Blok untuk membuka modal gambar di desktop
+    else if (e.target.closest('.card-image-container')) {
+        const img = card.querySelector('.img-output') || card.querySelector('.card-image');
+        if (img) {
+            modalImage.src = img.src;
+            imageModal.style.display = 'flex';
+        }
+    }
+
     });
 
     promptModalImage.addEventListener('click', () => {
